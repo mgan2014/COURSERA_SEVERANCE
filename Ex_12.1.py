@@ -1,4 +1,12 @@
 import socket
+def find_value(str_all, str_key):
+    if len(str_all) > len(str_key):
+            key_pos = str_all.find(str_key)
+            #print(key_pos)
+            if (key_pos > 0):
+                key_pos = key_pos + len(str_key) + 1
+                key_end = str_all.find('\r', key_pos)
+                print(str_key, str_all[key_pos:key_end])
 
 mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 mysock.connect(('data.pr4e.org',80))
@@ -11,12 +19,11 @@ while True:
         break
     #print(data.decode())
     received_info = data.decode()
-    if len(received_info) > len('ETag'):
-        ETag_pos = received_info.find('ETag:')
-        #print(ETag_pos)
-        if (ETag_pos > 0):
-            ETag_pos = ETag_pos + len('ETag:') + 1
-            ETag_end = received_info.find('\r', ETag_pos)
-            print('ETag:', received_info[ETag_pos:ETag_end])
+    find_value(received_info,'Last-Modified:')
+    find_value(received_info,'ETag:')
+    find_value(received_info,'Content-Length:')
+    find_value(received_info,'Cache-Control:')
+    find_value(received_info,'Content-Type:')
+    
 
 mysock.close()
